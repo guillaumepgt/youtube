@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import VideoGrid from './components/VideoGrid';
+import Test from './components/Test';
 
 class ErrorBoundary extends React.Component {
 	state = { error: null };
@@ -17,7 +19,7 @@ class ErrorBoundary extends React.Component {
 	}
 }
 
-function App() {
+function MainApp() {
 	const [videos, setVideos] = useState([]);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -251,6 +253,17 @@ function App() {
 				<VideoGrid videos={videos} />
 			</div>
 		</ErrorBoundary>
+	);
+}
+
+function App() {
+	return (
+		<Router>
+			<Routes>
+				<Route path="/" element={<MainApp />} />
+				<Route path="/test" element={<Test />} />
+			</Routes>
+		</Router>
 	);
 }
 

@@ -296,6 +296,7 @@ pub async fn subscriptions_videos(req: HttpRequest) -> HttpResponse {
             }
 
             page_token = body["nextPageToken"].as_str().map(|s| s.to_string());
+            break;
             if page_token.is_none() {
                 break;
             }
