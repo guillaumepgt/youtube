@@ -28,12 +28,7 @@ const VideoGrid = ({ videos }) => {
 						▶<span className="logo-text">YouTube</span>
 					</div>
 				</div>
-				<div className="search-bar">
-					<input type="text" placeholder="Rechercher" />
-					<div className="search-icon">🔍</div>
-				</div>
 			</header>
-
 			<div className="youtube-main">
 				<aside className="youtube-sidebar">
 					<div className="sidebar-section">

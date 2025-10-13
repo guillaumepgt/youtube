@@ -24,6 +24,7 @@ function MainApp() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
+	const [searchInput, setSearchInput] = useState('');
 
 	useEffect(() => {
 		console.log('App mounted, checking authentication');
@@ -170,6 +171,45 @@ function MainApp() {
 		}
 	};
 
+	// Fonction de recherche
+	const handleSearch = async () => {
+		if (!searchInput.trim()) {
+			setError('Veuillez entrer un terme de recherche');
+			return;
+		}
+
+		setLoading(true);
+		setError(null);
+
+		try {
+			const response = await axios.get(`http://localhost:8080/videos/${encodeURIComponent(searchInput)}`);
+			console.log('Résultats de recherche:', response.data);
+
+			if (Array.isArray(response.data)) {
+				setVideos(response.data);
+				setError(null);
+			} else if (response.data.message) {
+				setError(response.data.message);
+			} else {
+				console.warn('Unexpected response format:', response.data);
+				setError('Réponse inattendue du serveur');
+			}
+
+			setLoading(false);
+		} catch (err) {
+			console.error('Erreur lors de la recherche:', err.message);
+			setError(`Erreur lors de la recherche: ${err.message}`);
+			setLoading(false);
+		}
+	};
+
+	// Permettre la recherche avec la touche Entrée
+	const handleKeyPress = (e) => {
+		if (e.key === 'Enter') {
+			handleSearch();
+		}
+	};
+
 	const handleLogout = () => {
 		console.log('Logging out...');
 		localStorage.removeItem('access_token');
@@ -214,9 +254,49 @@ function MainApp() {
 					color: 'white',
 					display: 'flex',
 					justifyContent: 'space-between',
-					alignItems: 'center'
+					alignItems: 'center',
+					gap: '1rem'
 				}}>
 					<h1>Vidéos des abonnements</h1>
+					<div className="search-bar" style={{
+						display: 'flex',
+						alignItems: 'center',
+						backgroundColor: '#1f1f1f',
+						borderRadius: '5px',
+						padding: '8px 12px',
+						flex: '1',
+						maxWidth: '300px'
+					}}>
+						<input
+							type="text"
+							placeholder="Rechercher"
+							value={searchInput}
+							onChange={(e) => setSearchInput(e.target.value)}
+							onKeyPress={handleKeyPress}
+							style={{
+								border: 'none',
+								background: 'none',
+								outline: 'none',
+								width: '100%',
+								color: 'white',
+								fontSize: '14px'
+							}}
+						/>
+						<div className="search-icon" style={{cursor: 'pointer'}}>
+							<button
+								onClick={handleSearch}
+								disabled={loading}
+								style={{
+									border: 'none',
+									background: 'none',
+									cursor: loading ? 'not-allowed' : 'pointer',
+									fontSize: '16px'
+								}}
+							>
+								{loading ? '⏳' : '🔍'}
+							</button>
+						</div>
+					</div>
 					<div>
 						<button
 							onClick={() => fetchVideos()}
@@ -248,9 +328,9 @@ function MainApp() {
 						</button>
 					</div>
 				</header>
-				{loading && <p style={{ textAlign: 'center', padding: '1rem' }}>Chargement des vidéos...</p>}
-				{error && <p style={{ color: 'red', textAlign: 'center', padding: '1rem' }}>{error}</p>}
-				<VideoGrid videos={videos} />
+				{loading && <p style={{textAlign: 'center', padding: '1rem'}}>Chargement des vidéos...</p>}
+				{error && <p style={{color: 'red', textAlign: 'center', padding: '1rem'}}>{error}</p>}
+				<VideoGrid videos={videos}/>
 			</div>
 		</ErrorBoundary>
 	);

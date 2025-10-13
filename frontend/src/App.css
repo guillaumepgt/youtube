@@ -52,3 +52,9 @@ button {
     padding: 10px;
     text-align: left;
 }
+
+.search-icon {
+    font-size: 18px;
+    cursor: pointer;
+    color: #000000;
+}
