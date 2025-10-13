@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import VideoGrid from './components/VideoGrid';
 import Test from './components/Test';
+import './App.css';
 
 class ErrorBoundary extends React.Component {
 	state = { error: null };
@@ -247,17 +248,14 @@ function MainApp() {
 
 	return (
 		<ErrorBoundary>
-			<div>
-				<header style={{
-					backgroundColor: '#282c34',
-					padding: '1rem',
-					color: 'white',
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					gap: '1rem'
-				}}>
-					<h1>Vidéos des abonnements</h1>
+			<div className="App">
+				<header className="App-header">
+					<div className="header-left">
+						<div className="menu-icon">☰</div>
+						<div className="logo">
+							▶<span className="logo-text">Premium</span>
+						</div>
+					</div>
 					<div className="search-bar" style={{
 						display: 'flex',
 						alignItems: 'center',
@@ -328,9 +326,99 @@ function MainApp() {
 						</button>
 					</div>
 				</header>
-				{loading && <p style={{textAlign: 'center', padding: '1rem'}}>Chargement des vidéos...</p>}
-				{error && <p style={{color: 'red', textAlign: 'center', padding: '1rem'}}>{error}</p>}
-				<VideoGrid videos={videos}/>
+				<div className="layout-container">
+					<div className="sidebar-wrapper">
+						<aside className="youtube-sidebar">
+							<div className="sidebar-section">
+								<a href="#" className="sidebar-item active">
+									<span className="icon">🏠</span>
+									<span>Accueil</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">📹</span>
+									<span>Shorts</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">📺</span>
+									<span>Abonnements</span>
+								</a>
+							</div>
+
+							<div className="sidebar-section">
+								<div className="sidebar-title">Vous</div>
+								<a href="#" className="sidebar-item">
+									<span className="icon">🕐</span>
+									<span>Historique</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">📋</span>
+									<span>Playlists</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">▶️</span>
+									<span>Vos vidéos</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">⏱️</span>
+									<span>À regarder plus tard</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">👍</span>
+									<span>Vidéos j'aime</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">⬇️</span>
+									<span>Téléchargements</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">✂️</span>
+									<span>Vos clips</span>
+								</a>
+							</div>
+
+							<div className="sidebar-section">
+								<div className="sidebar-title">Abonnements</div>
+								<a href="#" className="sidebar-item">
+									<span className="icon">▶️</span>
+									<span>YouTube</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">🏍️</span>
+									<span>100% MOTOS</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">🎤</span>
+									<span>Aaed Musa</span>
+								</a>
+								<a href="#" className="sidebar-item">
+									<span className="icon">🎯</span>
+									<span>Abrège</span>
+								</a>
+							</div>
+
+							<div className="sidebar-section">
+								<div className="sidebar-title">Explorer</div>
+								<a href="#" className="sidebar-item">
+									<span className="icon">🎵</span>
+									<span>Musique</span>
+								</a>
+							</div>
+						</aside>
+					</div>
+					<div className="content-wrapper">
+						{loading && (
+							<p style={{textAlign: 'center', padding: '1rem', color: '#f1f1f1'}}>
+								Chargement des vidéos...
+							</p>
+						)}
+						{error && (
+							<p style={{color: 'red', textAlign: 'center', padding: '1rem'}}>
+								{error}
+							</p>
+						)}
+						{videos && videos.length > 0 && <VideoGrid videos={videos}/>}
+					</div>
+				</div>
 			</div>
 		</ErrorBoundary>
 	);
@@ -340,8 +428,8 @@ function App() {
 	return (
 		<Router>
 			<Routes>
-				<Route path="/" element={<MainApp />} />
-				<Route path="/test" element={<Test />} />
+				<Route path="/" element={<MainApp/>}/>
+				<Route path="/test" element={<Test/>}/>
 			</Routes>
 		</Router>
 	);
