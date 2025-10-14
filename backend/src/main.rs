@@ -6,6 +6,7 @@ mod auth;
 mod subscriptions;
 mod videos;
 mod models;
+mod search_video;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -43,6 +44,7 @@ async fn main() -> std::io::Result<()> {
             .service(subscriptions::subscriptions)
             .service(subscriptions::subscriptions_videos)
             .service(videos::videos)
+            .service(search_video::search_youtube_videos)
     })
         .bind(("0.0.0.0", 8080))?
         .run()
