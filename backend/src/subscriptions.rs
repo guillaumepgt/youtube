@@ -256,7 +256,6 @@ pub async fn subscriptions_videos(req: HttpRequest) -> HttpResponse {
     let mut channel_ids: Vec<String> = Vec::new();
     let mut page_token: Option<String> = None;
 
-    // BOUCLE PRINCIPALE - Récupérer TOUS les abonnements
     loop {
         let mut url = format!(
             "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&maxResults=50"
@@ -288,7 +287,6 @@ pub async fn subscriptions_videos(req: HttpRequest) -> HttpResponse {
                 warn!("Aucun abonnement trouvé pour l'utilisateur");
             }
 
-            // Récupérer les channel IDs
             if let Some(items) = body["items"].as_array() {
                 for item in items {
                     if let Some(channel_id) = item["snippet"]["resourceId"]["channelId"].as_str() {
@@ -297,10 +295,8 @@ pub async fn subscriptions_videos(req: HttpRequest) -> HttpResponse {
                 }
             }
 
-            // Vérifier s'il y a une page suivante
             page_token = body["nextPageToken"].as_str().map(|s| s.to_string());
             if page_token.is_none() {
-                // Pas de page suivante, on sort de la boucle
                 break;
             }
         } else {
